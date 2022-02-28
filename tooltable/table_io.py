@@ -13,6 +13,7 @@ table_defaults = {
     'column_gap_spaces': 2,
     'cross_border': '┼',
     'vertical_border': '│',
+    'horizontal_border': '─',
 }
 
 
@@ -37,6 +38,7 @@ def print_table(
     column_gap_spaces=None,
     cross_border=None,
     vertical_border=None,
+    horizontal_border=None,
     add_line_rows=None,
     indent=None,
 ):
@@ -86,6 +88,8 @@ def print_table(
         cross_border = table_defaults['cross_border']
     if vertical_border is None:
         vertical_border = table_defaults['vertical_border']
+    if horizontal_border is None:
+        horizontal_border = table_defaults['horizontal_border']
 
     # add column index
     if column_index is not None:
@@ -132,6 +136,7 @@ def print_table(
         trim_width=trim_width,
         column_gap_spaces=column_gap_spaces,
         vertical_border=vertical_border,
+        horizontal_border=horizontal_border,
         cross_border=cross_border,
         none_str=none_str,
         number_commas=number_commas,
@@ -165,6 +170,7 @@ def _format_rows(
     trim_to_terminal,
     column_gap_spaces,
     vertical_border,
+    horizontal_border,
     cross_border,
     number_commas,
     decimal_places,
@@ -185,7 +191,9 @@ def _format_rows(
             ' ' * column_gap_spaces + vertical_border + ' ' * column_gap_spaces
         )
         line_delimiter = (
-            '─' * column_gap_spaces + cross_border + '─' * column_gap_spaces
+            horizontal_border * column_gap_spaces
+            + cross_border
+            + horizontal_border * column_gap_spaces
         )
         edge_gaps = True
     row_format['column_delimiter'] = column_delimiter
@@ -241,13 +249,15 @@ def _format_rows(
 
     # create format for line rows
     line_format_kwargs = dict(
-        row_format, column_delimiter=line_delimiter, ellipsis=False,
+        row_format,
+        column_delimiter=line_delimiter,
+        ellipsis=False,
     )
 
     # format rows
     str_rows = []
     if headers is not None or add_line_rows is not None:
-        line_row = ['─' * width for width in column_widths]
+        line_row = [horizontal_border * width for width in column_widths]
     for row in rows:
         str_rows.append(_format_row(row, **row_format))
     if add_line_rows is not None:
