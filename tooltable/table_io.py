@@ -205,7 +205,9 @@ def _format_rows(
         trim_width = row_format.get('trim_width')
         if trim_width is None or trim_width > n_terminal_columns:
             row_format['trim_width'] = n_terminal_columns
-    headers = [str(header) for header in headers]
+
+    if headers is not None:
+        headers = [str(header) for header in headers]
 
     # format numbers
     if number_commas or decimal_places is not None:
