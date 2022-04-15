@@ -183,9 +183,14 @@ def _format_rows(
     if to_stdout is None:
         to_stdout = file is None
     if compact:
-        column_delimiter = '  '
-        line_delimiter = '  '
-        edge_gaps = False
+        if compact == 2:
+            column_delimiter = ' '
+            line_delimiter = ' '
+            edge_gaps = False
+        else:
+            column_delimiter = '  '
+            line_delimiter = '  '
+            edge_gaps = False
     else:
         column_delimiter = (
             ' ' * column_gap_spaces + vertical_border + ' ' * column_gap_spaces
@@ -197,7 +202,8 @@ def _format_rows(
         )
         edge_gaps = True
     row_format['column_delimiter'] = column_delimiter
-    row_format['edge_gaps'] = edge_gaps
+    if row_format.get('edge_gaps') is None:
+        row_format['edge_gaps'] = edge_gaps
     if len(column_delimiter) != len(line_delimiter):
         raise Exception('delimiters need equal length')
     if trim_to_terminal:
