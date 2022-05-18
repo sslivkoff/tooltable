@@ -1,7 +1,5 @@
 import shutil
 
-import numpy as np
-
 
 table_defaults = {
     'justify': 'left',
@@ -223,6 +221,9 @@ def _format_rows(
             format_str = '{:,}'
         elif not number_commas and decimal_places is not None:
             format_str = '{:.' + str(decimal_places) + 'f}'
+
+        import numpy as np
+
         rows = [
             [
                 format_str.format(cell)
